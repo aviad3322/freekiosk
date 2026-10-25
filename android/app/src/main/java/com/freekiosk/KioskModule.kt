@@ -464,8 +464,11 @@ class KioskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
                         val dpm = reactApplicationContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
                         val adminComponent = ComponentName(reactApplicationContext, DeviceAdminReceiver::class.java)
                         if (dpm.isDeviceOwnerApp(reactApplicationContext.packageName)) {
-                            dpm.setScreenCaptureDisabled(adminComponent, false)
-                        }
+    dpm.setScreenCaptureDisabled(adminComponent, false)
+    try {
+        dpm.clearUserRestriction(adminComponent, android.os.UserManager.DISALLOW_SAFE_BOOT)
+    } catch (_: Exception) {}
+}
                         activity.disableKioskRestrictions()
                         activity.stopLockTask()
                         activity.finish()
