@@ -20,7 +20,11 @@ jobs:
 
       - run: npm install
 
-      - run: cd android && chmod +x gradlew && ./gradlew assembleRelease --no-daemon -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
+      - name: Gradle properties
+        run: cp android/gradle.properties.template android/gradle.properties
+
+      - run: cd android && chmod +x gradlew && ./gradlew assembleRelease --no-daemon
+
       - uses: actions/upload-artifact@v4
         with:
           name: freekiosk-apk
