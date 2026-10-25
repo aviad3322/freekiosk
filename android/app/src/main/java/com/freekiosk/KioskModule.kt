@@ -730,6 +730,13 @@ class KioskModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
                             }
 
                             dpm.setLockTaskPackages(adminComponent, uniqueWhitelist.toTypedArray())
+                            // Block safe mode boot (persistent Device Owner restriction)
+try {
+    dpm.addUserRestriction(adminComponent, android.os.UserManager.DISALLOW_SAFE_BOOT)
+    android.util.Log.d("KioskModule", "Safe boot restriction applied")
+} catch (e: Exception) {
+    android.util.Log.w("KioskModule", "Could not apply safe boot restriction: ${e.message}")
+}
                             activity.startLockTask()
                             // #277: blocked unless the admin allowed hardware screenshots
                             dpm.setScreenCaptureDisabled(adminComponent, !isHardwareScreenshotAllowed(reactApplicationContext))
